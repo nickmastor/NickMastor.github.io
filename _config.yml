@@ -1,0 +1,13 @@
+# Site settings
+title: Nikolaos Mastorakis | Hardware Security & FPGA
+description: Ph.D. student at Arizona State University. Hardware security, PUFs, secure & reliable FPGA systems.
+
+# Optional: If you want to use Jekyll in the future
+# theme: jekyll-theme-minimal
+
+# Author information
+author: Nikolaos Mastorakis
+email: nickmastorakis@gmail.com
+
+# Site URL (update if you get a custom domain)
+url: https://nickmastor.github.io
