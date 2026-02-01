@@ -1,16 +1,21 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nikolaos Mastorakis | Hardware Security & FPGA</title>
   <meta name="description" content="PhD student at ASU. Hardware security, PUFs, secure & reliable FPGA systems."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root { 
       --primary: #2563eb;
       --primary-dark: #1e40af;
       --secondary: #7c3aed;
       --accent: #06b6d4;
+      --red-accent: #C62828;
+      --red-accent-light: #f87171;
       --fg: #1f2937;
       --fg-light: #4b5563;
       --muted: #6b7280;
@@ -22,7 +27,7 @@
       --shadow: rgba(0, 0, 0, 0.1);
       --shadow-lg: rgba(0, 0, 0, 0.15);
       --sidebar-bg: #f5f7fa;
-      --sidebar-width: 220px;
+      --sidebar-width: 320px;
       --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     }
     
@@ -39,12 +44,17 @@
       --shadow-lg: rgba(0, 0, 0, 0.5);
       --sidebar-bg: #1f2937;
       --bg-gradient: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+      --red-accent: #f87171;
     }
     
-    * { box-sizing: border-box; }
+    * { 
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     
     body { 
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
       margin: 0; 
       color: var(--fg); 
       background: var(--bg-gradient);
@@ -54,33 +64,9 @@
       transition: background 0.3s ease, color 0.3s ease;
     }
     
-    .dark-mode-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 200;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
+    .container {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 8px var(--shadow);
-      transition: all 0.3s ease;
-    }
-    
-    .dark-mode-toggle:hover {
-      transform: scale(1.1);
-      box-shadow: 0 4px 12px var(--shadow-lg);
-    }
-    
-    .dark-mode-toggle svg {
-      width: 24px;
-      height: 24px;
-      fill: var(--fg);
+      width: 100%;
     }
     
     .sidebar {
@@ -91,175 +77,186 @@
       height: 100vh;
       background: var(--sidebar-bg);
       border-right: 1px solid var(--border);
-      padding: 80px 20px 40px;
+      padding: 32px;
       overflow-y: auto;
-      box-shadow: 2px 0 8px var(--shadow);
       z-index: 100;
       transition: background 0.3s ease, border-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .sidebar-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+    }
+    
+    .sidebar-profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    
+    .sidebar-profile img {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      box-shadow: 0 4px 12px var(--shadow);
+      margin-bottom: 16px;
+      object-fit: cover;
+    }
+    
+    .sidebar-profile h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 8px;
+    }
+    
+    .sidebar-profile .title {
+      font-size: 16px;
+      color: var(--fg);
+      margin-bottom: 8px;
+    }
+    
+    .sidebar-profile .affiliation {
+      font-size: 14px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .affiliation a {
+      color: var(--red-accent);
+      text-decoration: none;
+    }
+    
+    .affiliation a:hover {
+      text-decoration: underline;
+    }
+    
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(198, 40, 40, 0.4);
+      background-color: var(--bg);
+      color: var(--red-accent);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .theme-toggle:hover {
+      background-color: rgba(248, 113, 113, 0.15);
+    }
+    
+    [data-theme="dark"] .theme-toggle {
+      background-color: var(--card);
+      color: #fbbf24;
+      border-color: rgba(248, 113, 113, 0.5);
+    }
+    
+    .theme-toggle svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
     }
     
     .sidebar-nav {
       list-style: none;
       padding: 0;
-      margin: 0;
+      margin: 32px 0;
+      width: 100%;
     }
     
     .sidebar-nav li {
-      margin-bottom: 8px;
+      margin-bottom: 16px;
     }
     
     .sidebar-nav a {
       display: block;
-      padding: 10px 15px;
-      color: var(--fg);
+      padding: 8px 0;
+      color: var(--muted);
       text-decoration: none;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 500;
+      transition: all 0.3s ease;
     }
     
     .sidebar-nav a:hover,
-    .sidebar-nav a.active {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      transform: translateX(4px);
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    .sidebar-nav a.active-link {
+      color: var(--red-accent);
+      transform: scale(1.05);
+    }
+    
+    .sidebar-contact {
+      margin-top: auto;
+      width: 100%;
+    }
+    
+    .sidebar-contact h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 16px;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    .contact-item:hover {
+      color: var(--red-accent);
+    }
+    
+    .contact-item svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
     }
     
     .content-wrapper {
       margin-left: var(--sidebar-width);
       flex: 1;
       min-width: 0;
-      transition: margin-left 0.3s ease;
-    }
-    
-    header { 
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
-      padding: 80px 20px 60px;
-      box-shadow: 0 4px 20px var(--shadow-lg);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 500px;
-      height: 500px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    
-    .header-content {
-      max-width: 980px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .profile-image {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      border: 5px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      object-fit: cover;
-      flex-shrink: 0;
-      transition: transform 0.3s ease;
-    }
-    
-    .profile-image:hover {
-      transform: scale(1.05);
-    }
-    
-    .header-text {
-      flex: 1;
-    }
-    
-    h1 { 
-      margin: 0 0 12px; 
-      font-size: 42px; 
-      font-weight: 700;
-      letter-spacing: -1px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    .subtitle { 
-      margin: 0 0 20px; 
-      font-size: 18px; 
-      line-height: 1.6;
-      opacity: 0.95;
-      font-weight: 400;
-    }
-    
-    nav { 
-      display: flex; 
-      gap: 16px; 
-      flex-wrap: wrap;
-      margin-top: 24px;
-    }
-    
-    nav a { 
-      color: white;
-      text-decoration: none;
-      padding: 10px 20px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 25px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    nav a:hover { 
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    
-    main { 
-      max-width: 980px; 
-      margin: -40px auto 0;
-      padding: 0 20px 80px;
-      position: relative;
-      z-index: 2;
+      padding: 48px;
+      max-width: 1200px;
     }
     
     section { 
-      margin-top: 40px;
-      scroll-margin-top: 100px;
+      margin-bottom: 64px;
+      scroll-margin-top: 24px;
     }
     
     h2 { 
-      font-size: 28px; 
+      font-size: 24px; 
       margin: 0 0 24px;
       font-weight: 700;
       color: var(--fg);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      border-bottom: 2px solid var(--red-accent-light);
+      padding-bottom: 8px;
       transition: color 0.3s ease;
-    }
-    
-    h2::before {
-      content: '';
-      width: 4px;
-      height: 28px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border-radius: 2px;
     }
     
     .card { 
       background: var(--card);
-      padding: 28px;
+      padding: 32px;
       border-radius: 16px;
       margin: 16px 0;
       box-shadow: 0 2px 8px var(--shadow);
@@ -283,18 +280,10 @@
     }
     
     .meta { 
-      color: var(--muted); 
+      color: var(--red-accent);
       font-size: 14px; 
       margin-top: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: color 0.3s ease;
-    }
-    
-    .meta::before {
-      content: '📍';
-      font-size: 12px;
+      font-weight: 500;
     }
     
     ul { 
@@ -311,19 +300,13 @@
     
     .pill { 
       display: inline-block;
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      margin: 6px 8px 0 0;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      background: rgba(248, 113, 113, 0.15);
+      color: var(--red-accent);
+      margin: 4px 8px 4px 0;
       font-size: 13px;
       font-weight: 500;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-      transition: transform 0.2s ease;
-    }
-    
-    .pill:hover {
-      transform: scale(1.05);
     }
     
     a {
@@ -334,7 +317,7 @@
     }
     
     a:hover {
-      color: var(--primary-dark);
+      color: var(--red-accent);
       text-decoration: underline;
     }
     
@@ -364,6 +347,7 @@
       
       .content-wrapper {
         margin-left: 0;
+        padding: 24px;
       }
       
       .menu-toggle {
@@ -380,11 +364,6 @@
         cursor: pointer;
         font-size: 18px;
       }
-      
-      .dark-mode-toggle {
-        top: 20px;
-        right: 20px;
-      }
     }
     
     @media (min-width: 1025px) {
@@ -394,26 +373,8 @@
     }
     
     @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .profile-image {
-        width: 140px;
-        height: 140px;
-      }
-      
-      h1 {
-        font-size: 32px;
-      }
-      
-      .subtitle {
-        font-size: 16px;
-      }
-      
-      nav {
-        justify-content: center;
+      .sidebar {
+        width: 280px;
       }
       
       .card {
@@ -435,276 +396,389 @@
     .card {
       animation: fadeIn 0.6s ease-out;
     }
-    
-    section:nth-child(1) .card { animation-delay: 0.1s; }
-    section:nth-child(2) .card { animation-delay: 0.2s; }
-    section:nth-child(3) .card { animation-delay: 0.3s; }
   </style>
 </head>
 <body>
   <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
   
-  <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
-    <svg id="sun-icon" viewBox="0 0 24 24" style="display: none;">
-      <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/>
-    </svg>
-    <svg id="moon-icon" viewBox="0 0 24 24">
-      <path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 0018 9a8.97 8.97 0 00-8.1-5.463.75.75 0 01.628-.819zM6.464 2.718a.75.75 0 00-.162.819A8.97 8.97 0 0118 9a8.97 8.97 0 01-8.1-5.463.75.75 0 00-.628-.819zM2.25 12a9.75 9.75 0 1119.5 0 9.75 9.75 0 01-19.5 0z"/>
-    </svg>
-  </button>
-  
-  <aside class="sidebar">
-    <nav class="sidebar-nav">
-      <li><a href="#about">About</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#awards">Awards</a></li>
-      <li><a href="#training">Training</a></li>
-    </nav>
-  </aside>
-
-  <div class="content-wrapper">
-    <header>
-      <div class="header-content">
-        <img src="./images/Nikolaos_Mastorakis.jpeg" alt="Nikolaos Mastorakis" class="profile-image" />
-        <div class="header-text">
+  <div class="container">
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <div class="sidebar-profile">
+          <img src="./images/Nikolaos_Mastorakis.jpeg" alt="Nikolaos Mastorakis" />
           <h1>Nikolaos Mastorakis</h1>
-          <p class="subtitle">
-            Ph.D. student (ECE) at Arizona State University • Hardware security • PUFs • Secure & reliable FPGA-based systems
-          </p>
-          <nav>
-            <a href="mailto:nickmastorakis@gmail.com">📧 Email</a>
-            <a href="https://www.linkedin.com/in/nikos-mastorakis-046989134" target="_blank" rel="noopener">💼 LinkedIn</a>
-            <a href="https://github.com/NikolaosMastorakis" target="_blank" rel="noopener">💻 GitHub</a>
-            <a href="./Mastorakis_Nikolaos.pdf">📄 Download CV</a>
-          </nav>
+          <p class="title">PhD Student & Graduate Research Assistant</p>
+          <div class="affiliation">
+            <a href="https://sites.google.com/view/eirini-eleni-tsiropoulou/proton-lab" target="_blank">PROTON Lab, Arizona State University</a>
+            <button
+              id="themeToggle"
+              type="button"
+              class="theme-toggle"
+              aria-label="Toggle dark mode"
+              title="Toggle dark mode"
+            >
+              <svg id="moon-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.5l2.52 5.11 5.64.82-4.08 3.98.96 5.61L12 15.97l-5.04 2.65.96-5.61-4.08-3.98 5.64-.82L12 2.5Z"/>
+              </svg>
+              <svg id="sun-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+                <path d="M12 5.75a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 12 5.75Zm-5.25 6.25a.75.75 0 0 1-.75.75H5.5a.75.75 0 0 1 0-1.5h.5a.75.75 0 0 1 .75.75Zm11.5 0a.75.75 0 0 1-.75.75h-.5a.75.75 0 0 1 0-1.5h.5a.75.75 0 0 1 .75.75Zm-6.25 6.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Zm-3.8-12.22a.75.75 0 0 1 1.06 0l.36.36a.75.75 0 0 1-1.06 1.06l-.36-.36a.75.75 0 0 1 0-1.06Zm8.48 8.48a.75.75 0 0 1 1.06 0l.36.36a.75.75 0 0 1-1.06 1.06l-.36-.36a.75.75 0 0 1 0-1.06Zm0-8.48.36.36a.75.75 0 1 1-1.06 1.06l-.36-.36a.75.75 0 1 1 1.06-1.06ZM8.7 15.92l.36.36a.75.75 0 1 1-1.06 1.06l-.36-.36a.75.75 0 1 1 1.06-1.06ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#education" class="nav-link">Education</a></li>
+          <li><a href="#experience" class="nav-link">Experience</a></li>
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#skills" class="nav-link">Skills</a></li>
+          <li><a href="#awards" class="nav-link">Awards</a></li>
+          <li><a href="#training" class="nav-link">Training</a></li>
+        </nav>
+
+        <div class="sidebar-contact">
+          <h3>Contact</h3>
+          <a href="mailto:nickmastorakis@gmail.com" class="contact-item">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+              <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+            </svg>
+            <span>Email</span>
+          </a>
+          <a href="https://www.linkedin.com/in/nikos-mastorakis-046989134" target="_blank" rel="noopener" class="contact-item">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+          <a href="https://github.com/NikolaosMastorakis" target="_blank" rel="noopener" class="contact-item">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.165 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" />
+            </svg>
+            <span>GitHub</span>
+          </a>
+          <a href="./Mastorakis_Nikolaos.pdf" class="contact-item">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+            </svg>
+            <span>Download CV</span>
+          </a>
         </div>
       </div>
-    </header>
+    </aside>
 
-    <main>
-      <section id="about">
-        <h2>About</h2>
-        <div class="card">
-          <p style="margin:0; line-height:1.7; font-size: 16px; color: var(--fg-light);">
-            Nikolaos Mastorakis (Graduate Student Member, IEEE) received the Integrated Master's degree (M.Eng.)
-            in Electrical and Computer Engineering from the National Technical University of Athens (NTUA), Greece, in 2022.
-            He is currently pursuing the Ph.D. degree in Electrical and Computer Engineering at Arizona State University.
-          </p>
-          <p style="margin:16px 0 0; line-height:1.7; font-size: 16px; color: var(--fg-light);">
-            His doctoral research focuses on hardware security, with an emphasis on Physical Unclonable Functions (PUFs)
-            and secure and reliable FPGA-based systems, including fault tolerance and hardware-level protection mechanisms
-            for cyber-physical and embedded platforms.
-          </p>
-        </div>
+    <div class="content-wrapper">
+      <main>
+        <section id="about">
+          <div class="card">
+            <h2>About</h2>
+            <p style="color: var(--fg-light); line-height: 1.8; margin-bottom: 16px;">
+              Nikolaos Mastorakis (Graduate Student Member, IEEE) received the Integrated Master's degree (M.Eng.)
+              in Electrical and Computer Engineering from the National Technical University of Athens (NTUA), Greece, in 2022.
+              He is currently pursuing the Ph.D. degree in Electrical and Computer Engineering at Arizona State University.
+            </p>
+            <p style="color: var(--fg-light); line-height: 1.8; margin-bottom: 16px;">
+              His doctoral research focuses on hardware security, with an emphasis on Physical Unclonable Functions (PUFs)
+              and secure and reliable FPGA-based systems, including fault tolerance and hardware-level protection mechanisms
+              for cyber-physical and embedded platforms.
+            </p>
+            <div style="margin-top: 20px;">
+              <span class="pill">Hardware Security</span>
+              <span class="pill">PUFs</span>
+              <span class="pill">FPGA</span>
+              <span class="pill">Fault Tolerance</span>
+              <span class="pill">Embedded Systems</span>
+            </div>
+          </div>
+        </section>
 
-        <div style="margin-top: 20px;">
-          <span class="pill">Hardware Security</span>
-          <span class="pill">PUFs</span>
-          <span class="pill">FPGA</span>
-          <span class="pill">Fault Tolerance</span>
-          <span class="pill">Embedded Systems</span>
-        </div>
-      </section>
+        <section id="education">
+          <div class="card">
+            <h2>Education</h2>
+            <div style="margin-bottom: 24px;">
+              <strong>Ph.D. in Electrical and Computer Engineering — Arizona State University</strong>
+              <div class="meta">Aug 2024 – Present • Tempe, AZ, USA</div>
+              <div style="margin-top: 8px; color: var(--fg-light); font-style: italic;">
+                <strong style="color: var(--fg); font-style: normal;">Research Focus:</strong> Hardware Security, Physical Unclonable Functions (PUFs), Secure and Reliable FPGA-Based Systems
+              </div>
+            </div>
+            <div>
+              <strong>Integrated Master of Electrical and Computer Engineering (MEng ECE) — NTUA</strong>
+              <div class="meta">Oct 2015 – Jun 2022 • Athens, Greece</div>
+              <div style="margin-top: 8px; color: var(--fg-light); font-style: italic;">
+                <strong style="color: var(--fg); font-style: normal;">Thesis:</strong> Multi-Error Mitigation Techniques on SoC FPGAs for Improved Fault Tolerance.
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <section id="education">
-        <h2>Education</h2>
-        <div class="card">
-          <strong>Ph.D. in Electrical and Computer Engineering — Arizona State University</strong>
-          <div class="meta">Aug 2024 – Present • Tempe, AZ, USA</div>
-          <div style="margin-top: 12px; color: var(--fg-light);"><strong style="color: var(--fg);">Research Focus:</strong> Hardware Security, Physical Unclonable Functions (PUFs), Secure and Reliable FPGA-Based Systems</div>
-        </div>
-        <div class="card">
-          <strong>Integrated Master of Electrical and Computer Engineering (MEng ECE) — NTUA</strong>
-          <div class="meta">Oct 2015 – Jun 2022 • Athens, Greece</div>
-          <div style="margin-top: 12px; color: var(--fg-light);"><strong style="color: var(--fg);">Thesis:</strong> Multi-Error Mitigation Techniques on SoC FPGAs for Improved Fault Tolerance.</div>
-        </div>
-      </section>
+        <section id="experience">
+          <div class="card">
+            <h2>Experience</h2>
+            <div style="margin-bottom: 24px;">
+              <strong>Senior Embedded Software Engineer — Software Competitiveness International S.A.</strong>
+              <div class="meta">Sept 2021 – Jul 2024 • Athens, Greece</div>
+              <ul>
+                <li>Led HQoS analysis, development, and testing, contributing to critical telecommunications software for global clients.</li>
+                <li>Acted as the go-to expert for troubleshooting and resolving complex system issues.</li>
+                <li>Mentored and trained colleagues through knowledge-sharing sessions for internal teams.</li>
+                <li>Coordinated incremental planning cycles (3 months), managing workload distribution across the team to ensure timely delivery and quality outcomes.</li>
+                <li>Applied embedded systems knowledge to optimize system performance and integrate advanced features into customer solutions.</li>
+              </ul>
+            </div>
 
-      <section id="experience">
-        <h2>Experience</h2>
+            <div style="margin-bottom: 24px;">
+              <strong>Researcher (ECE-NTUA Microlab) — National Technical University of Athens</strong>
+              <div class="meta">Mar 2020 – Jun 2022 • Athens, Greece</div>
+              <ul>
+                <li>Designed and implemented multi-error mitigation architectures on SoC FPGAs, enhancing fault tolerance for space systems.</li>
+                <li><a href="https://ieeexplore.ieee.org/document/9939621" target="_blank" rel="noopener">Co-author</a>: "Combining Fault Tolerance Techniques and COTS SoC Accelerators for Payload Processing in Space."</li>
+                <li>Developed expertise in FPGA Design, Verilog, and hardware optimization for advanced research applications.</li>
+              </ul>
+            </div>
 
-        <div class="card">
-          <strong>Senior Embedded Software Engineer — Software Competitiveness International S.A.</strong>
-          <div class="meta">Sept 2021 – Jul 2024 • Athens, Greece</div>
-          <ul>
-            <li>Led HQoS analysis, development, and testing, contributing to critical telecommunications software for global clients.</li>
-            <li>Acted as the go-to expert for troubleshooting and resolving complex system issues.</li>
-            <li>Mentored and trained colleagues through knowledge-sharing sessions for internal teams.</li>
-            <li>Coordinated incremental planning cycles (3 months), managing workload distribution across the team to ensure timely delivery and quality outcomes.</li>
-            <li>Applied embedded systems knowledge to optimize system performance and integrate advanced features into customer solutions.</li>
-          </ul>
-        </div>
+            <div style="margin-bottom: 24px;">
+              <strong>Software Engineer — Hellenic Greek Army (401st Army Hospital)</strong>
+              <div class="meta">Nov 2020 – Jul 2021 • Athens, Greece</div>
+              <ul>
+                <li>Assistant in First Office of 401st Army Hospital. Responsible for IT maintenance of the Office.</li>
+              </ul>
+            </div>
 
-        <div class="card">
-          <strong>Researcher (ECE-NTUA Microlab) — National Technical University of Athens</strong>
-          <div class="meta">Mar 2020 – Jun 2022 • Athens, Greece</div>
-          <ul>
-            <li>Designed and implemented multi-error mitigation architectures on SoC FPGAs, enhancing fault tolerance for space systems.</li>
-            <li><a href="https://ieeexplore.ieee.org/document/9939621" target="_blank" rel="noopener">Co-author</a>: "Combining Fault Tolerance Techniques and COTS SoC Accelerators for Payload Processing in Space."</li>
-            <li>Developed expertise in FPGA Design, Verilog, and hardware optimization for advanced research applications.</li>
-          </ul>
-        </div>
+            <div>
+              <strong>Software Engineer Intern — Fasmatech (NCSR Demokritos)</strong>
+              <div class="meta">Sept 2019 – Nov 2019 • NCSR Demokritos, Greece</div>
+              <ul>
+                <li>Developed algorithms for mass spectrometry in digital signal processing, focusing on spectral analysis.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
 
-        <div class="card">
-          <strong>Software Engineer — Hellenic Greek Army (401st Army Hospital)</strong>
-          <div class="meta">Nov 2020 – Jul 2021 • Athens, Greece</div>
-          <ul>
-            <li>Assistant in First Office of 401st Army Hospital. Responsible for IT maintenance of the Office.</li>
-          </ul>
-        </div>
+        <section id="projects">
+          <div class="card">
+            <h2>Selected Projects</h2>
+            <div style="margin-bottom: 24px;">
+              <strong>FPGA-Based Multi-Error Mitigation — NTUA Microlab</strong>
+              <div class="meta">2021 • Athens, Greece</div>
+              <ul>
+                <li>Developed innovative fault-tolerance architectures on SoC FPGAs, enabling robust hardware design for critical systems.</li>
+              </ul>
+            </div>
 
-        <div class="card">
-          <strong>Software Engineer Intern — Fasmatech (NCSR Demokritos)</strong>
-          <div class="meta">Sept 2019 – Nov 2019 • NCSR Demokritos, Greece</div>
-          <ul>
-            <li>Developed algorithms for mass spectrometry in digital signal processing, focusing on spectral analysis.</li>
-          </ul>
-        </div>
-      </section>
+            <div style="margin-bottom: 24px;">
+              <strong>Forest Fire Monitoring System — Advantage Austria & IEEE NTUA Student Branch Hackathon</strong>
+              <div class="meta">2018 • Athens, Greece</div>
+              <ul>
+                <li>Designed IoT-based solution for real-time environmental monitoring, integrating cameras, sensors, and web-based controls.</li>
+              </ul>
+            </div>
 
-      <section id="projects">
-        <h2>Selected Projects</h2>
-        <div class="card">
-          <strong>FPGA-Based Multi-Error Mitigation — NTUA Microlab</strong>
-          <div class="meta">2021 • Athens, Greece</div>
-          <ul>
-            <li>Developed innovative fault-tolerance architectures on SoC FPGAs, enabling robust hardware design for critical systems.</li>
-          </ul>
-        </div>
+            <div>
+              <strong>Google Hash Code</strong>
+              <div class="meta">2018 & 2019 • Athens, Greece</div>
+              <ul>
+                <li>Participated in 2018 & 2019 Hash Code competition, achieving top 20 score in Greece.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
 
-        <div class="card">
-          <strong>Forest Fire Monitoring System — Advantage Austria & IEEE NTUA Student Branch Hackathon</strong>
-          <div class="meta">2018 • Athens, Greece</div>
-          <ul>
-            <li>Designed IoT-based solution for real-time environmental monitoring, integrating cameras, sensors, and web-based controls.</li>
-          </ul>
-        </div>
+        <section id="skills">
+          <div class="card">
+            <h2>Skills</h2>
+            <div style="margin-bottom: 16px;">
+              <strong style="margin-bottom: 8px; display: block;">Programming & Tools:</strong>
+              <div>
+                <span class="pill">C</span>
+                <span class="pill">C++</span>
+                <span class="pill">Python</span>
+                <span class="pill">Bash</span>
+                <span class="pill">Assembly</span>
+                <span class="pill">Verilog</span>
+                <span class="pill">VHDL</span>
+                <span class="pill">MATLAB</span>
+                <span class="pill">Cadence</span>
+                <span class="pill">Xilinx Vivado</span>
+              </div>
+            </div>
+            <div style="margin-bottom: 16px;">
+              <strong style="margin-bottom: 8px; display: block;">Specialization:</strong>
+              <div>
+                <span class="pill">Embedded Programming</span>
+                <span class="pill">FPGA Design</span>
+                <span class="pill">Hardware Security</span>
+                <span class="pill">Embedded Systems Optimization</span>
+                <span class="pill">ASIC Synthesis</span>
+              </div>
+            </div>
+            <div>
+              <strong style="margin-bottom: 8px; display: block;">Languages:</strong>
+              <div>
+                <span class="pill">English (C2)</span>
+                <span class="pill">Greek (Native)</span>
+                <span class="pill">French (B1)</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <div class="card">
-          <strong>Google Hash Code</strong>
-          <div class="meta">2018 & 2019 • Athens, Greece</div>
-          <ul>
-            <li>Participated in 2018 & 2019 Hash Code competition, achieving top 20 score in Greece.</li>
-          </ul>
-        </div>
-      </section>
+        <section id="awards">
+          <div class="card">
+            <h2>Awards</h2>
+            <div style="margin-bottom: 24px; padding: 16px; border-radius: 12px; border: 1px solid rgba(248, 113, 113, 0.3); background: rgba(248, 113, 113, 0.1);">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <strong style="color: var(--fg);">30th IFIP/IEEE VLSI-SoC — Best Paper Award (Co-author)</strong>
+                <span class="pill" style="font-size: 12px; padding: 4px 8px;">Oct 2022</span>
+              </div>
+              <div style="color: var(--fg-light); font-size: 14px;">
+                Co-author in <a href="https://www.ece.ntua.gr/gr/article/544" target="_blank" rel="noopener">best paper award</a> in 30th IFIP/IEEE VLSI-SoC • Patras, Greece
+              </div>
+            </div>
+            <div style="padding: 16px; border-radius: 12px; border: 1px solid rgba(248, 113, 113, 0.3); background: rgba(248, 113, 113, 0.1);">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <strong style="color: var(--fg);">Moving Education Forward — Eurobank Scholarship</strong>
+                <span class="pill" style="font-size: 12px; padding: 4px 8px;">Jul 2015</span>
+              </div>
+              <div style="color: var(--fg-light); font-size: 14px;">
+                Top graduate from high school • Heraklion, Greece
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <section id="skills">
-        <h2>Skills</h2>
-        <div class="card">
-          <div style="margin-bottom: 12px;"><strong>Programming & Tools:</strong> C, C++, Python, Bash, Assembly, Verilog, VHDL, MATLAB, Cadence, Xilinx Vivado</div>
-          <div style="margin-bottom: 12px; color: var(--fg-light);"><strong style="color: var(--fg);">Specialization:</strong> Embedded Programming, FPGA Design, Hardware Security, Embedded Systems Optimization, ASIC Synthesis</div>
-          <div style="color: var(--fg-light);"><strong style="color: var(--fg);">Languages:</strong> English (C2), Greek (Native), French (B1)</div>
-        </div>
-      </section>
+        <section id="training">
+          <div class="card">
+            <h2>Additional Training</h2>
+            <div>
+              <strong>Duisburg-Essen University — Exchange Program</strong>
+              <div class="meta">2019 • Duisburg, Germany</div>
+              <div style="margin-top: 8px; color: var(--fg-light); font-style: italic;">
+                Completed coursework on robotic systems control using advanced walking devices, supported by the DAAD Exchange Program.
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
-      <section id="awards">
-        <h2>Awards</h2>
-        <div class="card">
-          <strong>30th IFIP/IEEE VLSI-SoC — Best Paper Award (Co-author)</strong>
-          <div class="meta">Oct 2022 • Patras, Greece</div>
-          <ul>
-            <li>Co-author in <a href="https://www.ece.ntua.gr/gr/article/544" target="_blank" rel="noopener">best paper award</a> in 30th IFIP/IEEE VLSI-SoC</li>
-          </ul>
-        </div>
-        <div class="card">
-          <strong>Moving Education Forward — Eurobank Scholarship</strong>
-          <div class="meta">Jul 2015 • Heraklion, Greece</div>
-          <ul>
-            <li>Top graduate from high school</li>
-          </ul>
-        </div>
-      </section>
-
-      <section id="training">
-        <h2>Additional Training</h2>
-        <div class="card">
-          <strong>Duisburg-Essen University — Exchange Program</strong>
-          <div class="meta">2019 • Duisburg, Germany</div>
-          <ul>
-            <li>Completed coursework on robotic systems control using advanced walking devices, supported by the DAAD Exchange Program.</li>
-          </ul>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <div class="small">© <span id="y"></span> Nikolaos Mastorakis • Built with GitHub Pages</div>
-    </footer>
+      <footer>
+        <div class="small">© <span id="y"></span> Nikolaos Mastorakis • Built with GitHub Pages</div>
+      </footer>
+    </div>
   </div>
 
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
     
     // Dark mode functionality
-    function toggleDarkMode() {
-      const html = document.documentElement;
-      const currentTheme = html.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      
-      html.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      
-      // Update icons
-      const sunIcon = document.getElementById('sun-icon');
-      const moonIcon = document.getElementById('moon-icon');
-      if (newTheme === 'dark') {
+    const themeToggleButton = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+    const themeStorageKey = 'nm-theme';
+    
+    const safeStorage = {
+      get() {
+        try {
+          return localStorage.getItem(themeStorageKey);
+        } catch {
+          return null;
+        }
+      },
+      set(value) {
+        try {
+          localStorage.setItem(themeStorageKey, value);
+        } catch {
+          /* ignore */
+        }
+      }
+    };
+    
+    const getInitialTheme = () => {
+      const stored = safeStorage.get();
+      if (stored === 'dark') return true;
+      if (stored === 'light') return false;
+      return false; // default to light
+    };
+    
+    let isDarkMode = getInitialTheme();
+    
+    const updateToggleUI = () => {
+      if (!themeToggleButton) return;
+      if (isDarkMode) {
         sunIcon.style.display = 'block';
         moonIcon.style.display = 'none';
       } else {
         sunIcon.style.display = 'none';
         moonIcon.style.display = 'block';
       }
-    }
+      const label = isDarkMode ? 'Switch to light mode' : 'Switch to dark mode';
+      themeToggleButton.setAttribute('aria-label', label);
+      themeToggleButton.setAttribute('title', label);
+    };
     
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    const sunIcon = document.getElementById('sun-icon');
-    const moonIcon = document.getElementById('moon-icon');
-    if (savedTheme === 'dark') {
-      sunIcon.style.display = 'block';
-      moonIcon.style.display = 'none';
-    } else {
-      sunIcon.style.display = 'none';
-      moonIcon.style.display = 'block';
-    }
+    const applyThemeClass = () => {
+      const html = document.documentElement;
+      if (isDarkMode) {
+        html.setAttribute('data-theme', 'dark');
+      } else {
+        html.removeAttribute('data-theme');
+      }
+      updateToggleUI();
+    };
     
-    // Update active nav link on scroll
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.sidebar-nav a');
-    
-    function updateActiveNav() {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.pageYOffset >= sectionTop - 150) {
-          current = section.getAttribute('id');
-        }
-      });
+    if (themeToggleButton) {
+      applyThemeClass();
       
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + current) {
-          link.classList.add('active');
+      const toggleTheme = () => {
+        isDarkMode = !isDarkMode;
+        safeStorage.set(isDarkMode ? 'dark' : 'light');
+        applyThemeClass();
+      };
+      
+      themeToggleButton.addEventListener('click', toggleTheme);
+      themeToggleButton.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toggleTheme();
         }
       });
     }
     
-    window.addEventListener('scroll', updateActiveNav);
+    // Update active nav link on scroll using Intersection Observer
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.4
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.remove('active-link');
+            if (link.getAttribute('href').substring(1) === entry.target.id) {
+              link.classList.add('active-link');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => {
+      observer.observe(section);
+    });
     
     // Smooth scrolling for sidebar links
-    document.querySelectorAll('.sidebar-nav a').forEach(anchor => {
+    document.querySelectorAll('.nav-link').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Close sidebar on mobile after click
           if (window.innerWidth <= 1024) {
             document.querySelector('.sidebar').classList.remove('open');
           }
