@@ -21,8 +21,24 @@
       --border: #e5e7eb;
       --shadow: rgba(0, 0, 0, 0.1);
       --shadow-lg: rgba(0, 0, 0, 0.15);
-      --sidebar-bg: #ffffff;
+      --sidebar-bg: #f5f7fa;
       --sidebar-width: 220px;
+      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    
+    [data-theme="dark"] {
+      --fg: #e5e7eb;
+      --fg-light: #9ca3af;
+      --muted: #6b7280;
+      --bg: #111827;
+      --bg-alt: #1f2937;
+      --card: #1f2937;
+      --card-hover: #374151;
+      --border: #374151;
+      --shadow: rgba(0, 0, 0, 0.3);
+      --shadow-lg: rgba(0, 0, 0, 0.5);
+      --sidebar-bg: #1f2937;
+      --bg-gradient: linear-gradient(135deg, #111827 0%, #1f2937 100%);
     }
     
     * { box-sizing: border-box; }
@@ -31,10 +47,40 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
       margin: 0; 
       color: var(--fg); 
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      background: var(--bg-gradient);
       background-attachment: fixed;
       line-height: 1.6;
       display: flex;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    
+    .dark-mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 200;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px var(--shadow);
+      transition: all 0.3s ease;
+    }
+    
+    .dark-mode-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px var(--shadow-lg);
+    }
+    
+    .dark-mode-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--fg);
     }
     
     .sidebar {
@@ -45,10 +91,11 @@
       height: 100vh;
       background: var(--sidebar-bg);
       border-right: 1px solid var(--border);
-      padding: 120px 20px 40px;
+      padding: 80px 20px 40px;
       overflow-y: auto;
       box-shadow: 2px 0 8px var(--shadow);
       z-index: 100;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
     
     .sidebar-nav {
@@ -84,6 +131,7 @@
       margin-left: var(--sidebar-width);
       flex: 1;
       min-width: 0;
+      transition: margin-left 0.3s ease;
     }
     
     header { 
@@ -198,6 +246,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      transition: color 0.3s ease;
     }
     
     h2::before {
@@ -230,6 +279,7 @@
       font-weight: 600;
       display: block;
       margin-bottom: 8px;
+      transition: color 0.3s ease;
     }
     
     .meta { 
@@ -239,6 +289,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      transition: color 0.3s ease;
     }
     
     .meta::before {
@@ -254,6 +305,8 @@
     ul li {
       margin: 8px 0;
       line-height: 1.7;
+      color: var(--fg-light);
+      transition: color 0.3s ease;
     }
     
     .pill { 
@@ -292,6 +345,7 @@
       text-align: center;
       background: var(--bg);
       margin-top: 60px;
+      transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     }
     
     .small { 
@@ -325,6 +379,11 @@
         border-radius: 8px;
         cursor: pointer;
         font-size: 18px;
+      }
+      
+      .dark-mode-toggle {
+        top: 20px;
+        right: 20px;
       }
     }
     
@@ -385,6 +444,15 @@
 <body>
   <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
   
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+    <svg id="sun-icon" viewBox="0 0 24 24" style="display: none;">
+      <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/>
+    </svg>
+    <svg id="moon-icon" viewBox="0 0 24 24">
+      <path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 0018 9a8.97 8.97 0 00-8.1-5.463.75.75 0 01.628-.819zM6.464 2.718a.75.75 0 00-.162.819A8.97 8.97 0 0118 9a8.97 8.97 0 01-8.1-5.463.75.75 0 00-.628-.819zM2.25 12a9.75 9.75 0 1119.5 0 9.75 9.75 0 01-19.5 0z"/>
+    </svg>
+  </button>
+  
   <aside class="sidebar">
     <nav class="sidebar-nav">
       <li><a href="#about">About</a></li>
@@ -420,12 +488,12 @@
       <section id="about">
         <h2>About</h2>
         <div class="card">
-          <p style="margin:0; line-height:1.7; font-size: 16px;">
+          <p style="margin:0; line-height:1.7; font-size: 16px; color: var(--fg-light);">
             Nikolaos Mastorakis (Graduate Student Member, IEEE) received the Integrated Master's degree (M.Eng.)
             in Electrical and Computer Engineering from the National Technical University of Athens (NTUA), Greece, in 2022.
             He is currently pursuing the Ph.D. degree in Electrical and Computer Engineering at Arizona State University.
           </p>
-          <p style="margin:16px 0 0; line-height:1.7; font-size: 16px;">
+          <p style="margin:16px 0 0; line-height:1.7; font-size: 16px; color: var(--fg-light);">
             His doctoral research focuses on hardware security, with an emphasis on Physical Unclonable Functions (PUFs)
             and secure and reliable FPGA-based systems, including fault tolerance and hardware-level protection mechanisms
             for cyber-physical and embedded platforms.
@@ -446,12 +514,12 @@
         <div class="card">
           <strong>Ph.D. in Electrical and Computer Engineering — Arizona State University</strong>
           <div class="meta">Aug 2024 – Present • Tempe, AZ, USA</div>
-          <div style="margin-top: 12px; color: var(--fg-light);"><strong>Research Focus:</strong> Hardware Security, Physical Unclonable Functions (PUFs), Secure and Reliable FPGA-Based Systems</div>
+          <div style="margin-top: 12px; color: var(--fg-light);"><strong style="color: var(--fg);">Research Focus:</strong> Hardware Security, Physical Unclonable Functions (PUFs), Secure and Reliable FPGA-Based Systems</div>
         </div>
         <div class="card">
           <strong>Integrated Master of Electrical and Computer Engineering (MEng ECE) — NTUA</strong>
           <div class="meta">Oct 2015 – Jun 2022 • Athens, Greece</div>
-          <div style="margin-top: 12px; color: var(--fg-light);"><strong>Thesis:</strong> Multi-Error Mitigation Techniques on SoC FPGAs for Improved Fault Tolerance.</div>
+          <div style="margin-top: 12px; color: var(--fg-light);"><strong style="color: var(--fg);">Thesis:</strong> Multi-Error Mitigation Techniques on SoC FPGAs for Improved Fault Tolerance.</div>
         </div>
       </section>
 
@@ -528,8 +596,8 @@
         <h2>Skills</h2>
         <div class="card">
           <div style="margin-bottom: 12px;"><strong>Programming & Tools:</strong> C, C++, Python, Bash, Assembly, Verilog, VHDL, MATLAB, Cadence, Xilinx Vivado</div>
-          <div style="margin-bottom: 12px; color: var(--fg-light);"><strong>Specialization:</strong> Embedded Programming, FPGA Design, Hardware Security, Embedded Systems Optimization, ASIC Synthesis</div>
-          <div style="color: var(--fg-light);"><strong>Languages:</strong> English (C2), Greek (Native), French (B1)</div>
+          <div style="margin-bottom: 12px; color: var(--fg-light);"><strong style="color: var(--fg);">Specialization:</strong> Embedded Programming, FPGA Design, Hardware Security, Embedded Systems Optimization, ASIC Synthesis</div>
+          <div style="color: var(--fg-light);"><strong style="color: var(--fg);">Languages:</strong> English (C2), Greek (Native), French (B1)</div>
         </div>
       </section>
 
@@ -570,6 +638,40 @@
 
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
+    
+    // Dark mode functionality
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      // Update icons
+      const sunIcon = document.getElementById('sun-icon');
+      const moonIcon = document.getElementById('moon-icon');
+      if (newTheme === 'dark') {
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+      } else {
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+      }
+    }
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+    if (savedTheme === 'dark') {
+      sunIcon.style.display = 'block';
+      moonIcon.style.display = 'none';
+    } else {
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
+    }
     
     // Update active nav link on scroll
     const sections = document.querySelectorAll('section[id]');
