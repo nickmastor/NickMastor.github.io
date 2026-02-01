@@ -7,464 +7,421 @@
   <meta name="description" content="PhD student at ASU. Hardware security, PUFs, secure & reliable FPGA systems."/>
   <style>
     :root { 
-      --primary: #2563eb;
-      --primary-dark: #1e40af;
-      --secondary: #7c3aed;
-      --accent: #06b6d4;
-      --fg: #1f2937;
-      --fg-light: #4b5563;
-      --muted: #6b7280;
+      --fg: #1a1a1a;
+      --fg-light: #666;
+      --accent: #8B4513;
+      --accent-light: #A0522D;
       --bg: #ffffff;
-      --bg-alt: #f9fafb;
-      --card: #ffffff;
-      --card-hover: #f8fafc;
-      --border: #e5e7eb;
-      --shadow: rgba(0, 0, 0, 0.1);
-      --shadow-lg: rgba(0, 0, 0, 0.15);
+      --border: #e0e0e0;
     }
     
-    * { box-sizing: border-box; }
-    
-    body { 
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-      margin: 0; 
-      color: var(--fg); 
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      background-attachment: fixed;
-      line-height: 1.6;
-    }
-    
-    header { 
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
-      padding: 80px 20px 60px;
-      box-shadow: 0 4px 20px var(--shadow-lg);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 500px;
-      height: 500px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    
-    .header-content {
-      max-width: 980px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .profile-image {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      border: 5px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      object-fit: cover;
-      flex-shrink: 0;
-      transition: transform 0.3s ease;
-    }
-    
-    .profile-image:hover {
-      transform: scale(1.05);
-    }
-    
-    .header-text {
-      flex: 1;
-    }
-    
-    h1 { 
-      margin: 0 0 12px; 
-      font-size: 42px; 
-      font-weight: 700;
-      letter-spacing: -1px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    .subtitle { 
-      margin: 0 0 20px; 
-      font-size: 18px; 
-      line-height: 1.6;
-      opacity: 0.95;
-      font-weight: 400;
-    }
-    
-    nav { 
-      display: flex; 
-      gap: 16px; 
-      flex-wrap: wrap;
-      margin-top: 24px;
-    }
-    
-    nav a { 
-      color: white;
-      text-decoration: none;
-      padding: 10px 20px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 25px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    nav a:hover { 
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    
-    main { 
-      max-width: 980px; 
-      margin: -40px auto 0;
-      padding: 0 20px 80px;
-      position: relative;
-      z-index: 2;
-    }
-    
-    section { 
-      margin-top: 40px;
-    }
-    
-    h2 { 
-      font-size: 28px; 
-      margin: 0 0 24px;
-      font-weight: 700;
-      color: var(--fg);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    h2::before {
-      content: '';
-      width: 4px;
-      height: 28px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border-radius: 2px;
-    }
-    
-    .card { 
-      background: var(--card);
-      padding: 28px;
-      border-radius: 16px;
-      margin: 16px 0;
-      box-shadow: 0 2px 8px var(--shadow);
-      border: 1px solid var(--border);
-      transition: all 0.3s ease;
-    }
-    
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px var(--shadow-lg);
-      background: var(--card-hover);
-    }
-    
-    .card strong {
-      color: var(--fg);
-      font-size: 18px;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 8px;
-    }
-    
-    .meta { 
-      color: var(--muted); 
-      font-size: 14px; 
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .meta::before {
-      content: '📍';
-      font-size: 12px;
-    }
-    
-    ul { 
-      margin: 16px 0 0 24px;
+    * { 
+      box-sizing: border-box;
+      margin: 0;
       padding: 0;
     }
     
-    ul li {
-      margin: 8px 0;
-      line-height: 1.7;
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
     }
     
-    .pill { 
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      margin: 6px 8px 0 0;
-      font-size: 13px;
-      font-weight: 500;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-      transition: transform 0.2s ease;
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 40px;
     }
     
-    .pill:hover {
-      transform: scale(1.05);
+    header {
+      margin-bottom: 60px;
     }
     
-    a {
-      color: var(--primary);
+    h1 {
+      font-size: 48px;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    
+    .title {
+      font-size: 18px;
+      color: var(--fg);
+      margin-bottom: 8px;
+      font-weight: 400;
+    }
+    
+    .affiliation {
+      font-size: 16px;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    
+    .star-button {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--accent-light);
+      border-radius: 50%;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 10px;
+    }
+    
+    .star-button:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-light);
+    }
+    
+    .star-button svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--accent);
+    }
+    
+    .star-button:hover svg {
+      fill: white;
+    }
+    
+    nav {
+      margin: 40px 0;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    
+    nav a {
+      color: var(--fg);
       text-decoration: none;
-      font-weight: 500;
+      font-size: 16px;
+      font-weight: 400;
       transition: color 0.2s ease;
     }
     
-    a:hover {
-      color: var(--primary-dark);
-      text-decoration: underline;
+    nav a:hover {
+      color: var(--accent);
     }
     
-    footer { 
-      border-top: 1px solid var(--border);
-      padding: 32px 20px;
-      color: var(--muted);
-      text-align: center;
-      background: var(--bg);
-      margin-top: 60px;
+    section {
+      margin: 50px 0;
+      scroll-margin-top: 20px;
     }
     
-    .small { 
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
+    }
+    
+    .item {
+      margin-bottom: 25px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .item:last-child {
+      border-bottom: none;
+    }
+    
+    .item strong {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--fg);
+      display: block;
+      margin-bottom: 6px;
+    }
+    
+    .item .meta {
+      color: var(--fg-light);
       font-size: 14px;
+      margin-bottom: 10px;
+    }
+    
+    .item ul {
+      margin: 10px 0 0 20px;
+      color: var(--fg-light);
+    }
+    
+    .item ul li {
+      margin: 6px 0;
+      line-height: 1.6;
+    }
+    
+    .contact {
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border);
+    }
+    
+    .contact h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 15px;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+      color: var(--fg-light);
+    }
+    
+    .contact-item svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--fg-light);
+    }
+    
+    .contact-item a {
+      color: var(--fg-light);
+      text-decoration: none;
+    }
+    
+    .contact-item a:hover {
+      color: var(--accent);
+    }
+    
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    
+    .pill {
+      display: inline-block;
+      padding: 6px 12px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--fg);
     }
     
     @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .profile-image {
-        width: 140px;
-        height: 140px;
+      .container {
+        padding: 40px 20px;
       }
       
       h1 {
-        font-size: 32px;
+        font-size: 36px;
       }
       
-      .subtitle {
-        font-size: 16px;
-      }
-      
-      nav {
-        justify-content: center;
-      }
-      
-      .card {
-        padding: 20px;
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
       }
     }
-    
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .card {
-      animation: fadeIn 0.6s ease-out;
-    }
-    
-    section:nth-child(1) .card { animation-delay: 0.1s; }
-    section:nth-child(2) .card { animation-delay: 0.2s; }
-    section:nth-child(3) .card { animation-delay: 0.3s; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-content">
-      <img src="./images/Nikolaos_Mastorakis.jpeg" alt="Nikolaos Mastorakis" class="profile-image" />
-      <div class="header-text">
-        <h1>Nikolaos Mastorakis</h1>
-        <p class="subtitle">
-          Ph.D. student (ECE) at Arizona State University • Hardware security • PUFs • Secure & reliable FPGA-based systems
-        </p>
-        <nav>
-          <a href="mailto:nickmastorakis@gmail.com">📧 Email</a>
-          <a href="https://www.linkedin.com/in/nikos-mastorakis-046989134" target="_blank" rel="noopener">💼 LinkedIn</a>
-          <a href="https://github.com/NikolaosMastorakis" target="_blank" rel="noopener">💻 GitHub</a>
-          <a href="./Nikolaos_Mastorakis_CV.pdf">📄 Download CV</a>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <section id="about">
-      <h2>About</h2>
-      <div class="card">
-        <p style="margin:0; line-height:1.7; font-size: 16px;">
-          Nikolaos Mastorakis (Graduate Student Member, IEEE) received the Integrated Master's degree (M.Eng.)
-          in Electrical and Computer Engineering from the National Technical University of Athens (NTUA), Greece, in 2022.
-          He is currently pursuing the Ph.D. degree in Electrical and Computer Engineering at Arizona State University.
-        </p>
-        <p style="margin:16px 0 0; line-height:1.7; font-size: 16px;">
-          His doctoral research focuses on hardware security, with an emphasis on Physical Unclonable Functions (PUFs)
-          and secure and reliable FPGA-based systems, including fault tolerance and hardware-level protection mechanisms
-          for cyber-physical and embedded platforms.
-        </p>
-      </div>
-
-      <div style="margin-top: 20px;">
-        <span class="pill">Hardware Security</span>
-        <span class="pill">PUFs</span>
-        <span class="pill">FPGA</span>
-        <span class="pill">Fault Tolerance</span>
-        <span class="pill">Embedded Systems</span>
-      </div>
-    </section>
-
-    <section id="education">
-      <h2>Education</h2>
-      <div class="card">
-        <strong>Ph.D. in Electrical and Computer Engineering — Arizona State University</strong>
-        <div class="meta">Aug 2024 – Present • Tempe, AZ, USA</div>
-        <div style="margin-top: 12px; color: var(--fg-light);"><strong>Research Focus:</strong> Hardware Security, Physical Unclonable Functions (PUFs), Secure and Reliable FPGA-Based Systems</div>
-      </div>
-      <div class="card">
-        <strong>Integrated Master of Electrical and Computer Engineering (MEng ECE) — NTUA</strong>
-        <div class="meta">Oct 2015 – Jun 2022 • Athens, Greece</div>
-        <div style="margin-top: 12px; color: var(--fg-light);"><strong>Thesis:</strong> Multi-Error Mitigation Techniques on SoC FPGAs for Improved Fault Tolerance.</div>
-      </div>
-    </section>
-
-    <section id="experience">
-      <h2>Experience</h2>
-
-      <div class="card">
-        <strong>Senior Embedded Software Engineer — Software Competitiveness International S.A.</strong>
-        <div class="meta">Sept 2021 – Jul 2024 • Athens, Greece</div>
+  <div class="container">
+    <header>
+      <h1>Nikolaos Mastorakis</h1>
+      <div class="title">PhD Student & Graduate Research Assistant</div>
+      <div class="affiliation">PROTON Lab, Arizona State University</div>
+      <button class="star-button" aria-label="Star">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </button>
+      
+      <nav>
         <ul>
-          <li>Led HQoS analysis, development, and testing, contributing to critical telecommunications software for global clients.</li>
-          <li>Acted as the go-to expert for troubleshooting and resolving complex system issues.</li>
-          <li>Mentored and trained colleagues through knowledge-sharing sessions for internal teams.</li>
-          <li>Coordinated incremental planning cycles (3 months), managing workload distribution across the team to ensure timely delivery and quality outcomes.</li>
-          <li>Applied embedded systems knowledge to optimize system performance and integrate advanced features into customer solutions.</li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#publications">Publications</a></li>
+          <li><a href="#awards">Awards</a></li>
+          <li><a href="#skills">Skills</a></li>
         </ul>
-      </div>
+      </nav>
+    </header>
 
-      <div class="card">
-        <strong>Researcher (ECE-NTUA Microlab) — National Technical University of Athens</strong>
-        <div class="meta">Mar 2020 – Jun 2022 • Athens, Greece</div>
-        <ul>
-          <li>Designed and implemented multi-error mitigation architectures on SoC FPGAs, enhancing fault tolerance for space systems.</li>
-          <li><a href="https://ieeexplore.ieee.org/document/9939621" target="_blank" rel="noopener">Co-author</a>: "Combining Fault Tolerance Techniques and COTS SoC Accelerators for Payload Processing in Space."</li>
-          <li>Developed expertise in FPGA Design, Verilog, and hardware optimization for advanced research applications.</li>
-        </ul>
-      </div>
+    <main>
+      <section id="about">
+        <h2>About</h2>
+        <div class="item">
+          <p style="color: var(--fg-light); line-height: 1.8;">
+            Nikolaos Mastorakis (Graduate Student Member, IEEE) received the Integrated Master's degree (M.Eng.)
+            in Electrical and Computer Engineering from the National Technical University of Athens (NTUA), Greece, in 2022.
+            He is currently pursuing the Ph.D. degree in Electrical and Computer Engineering at Arizona State University.
+          </p>
+          <p style="color: var(--fg-light); line-height: 1.8; margin-top: 15px;">
+            His doctoral research focuses on hardware security, with an emphasis on Physical Unclonable Functions (PUFs)
+            and secure and reliable FPGA-based systems, including fault tolerance and hardware-level protection mechanisms
+            for cyber-physical and embedded platforms.
+          </p>
+          <div class="pills">
+            <span class="pill">Hardware Security</span>
+            <span class="pill">PUFs</span>
+            <span class="pill">FPGA</span>
+            <span class="pill">Fault Tolerance</span>
+            <span class="pill">Embedded Systems</span>
+          </div>
+        </div>
+      </section>
 
-      <div class="card">
-        <strong>Software Engineer — Hellenic Greek Army (401st Army Hospital)</strong>
-        <div class="meta">Nov 2020 – Jul 2021 • Athens, Greece</div>
-        <ul>
-          <li>Assistant in First Office of 401st Army Hospital. Responsible for IT maintenance of the Office.</li>
-        </ul>
-      </div>
+      <section id="education">
+        <h2>Education</h2>
+        <div class="item">
+          <strong>Ph.D. in Electrical and Computer Engineering — Arizona State University</strong>
+          <div class="meta">Aug 2024 – Present • Tempe, AZ, USA</div>
+          <div style="color: var(--fg-light); margin-top: 8px;">
+            <strong style="color: var(--fg);">Research Focus:</strong> Hardware Security, Physical Unclonable Functions (PUFs), Secure and Reliable FPGA-Based Systems
+          </div>
+        </div>
+        <div class="item">
+          <strong>Integrated Master of Electrical and Computer Engineering (MEng ECE) — NTUA</strong>
+          <div class="meta">Oct 2015 – Jun 2022 • Athens, Greece</div>
+          <div style="color: var(--fg-light); margin-top: 8px;">
+            <strong style="color: var(--fg);">Thesis:</strong> Multi-Error Mitigation Techniques on SoC FPGAs for Improved Fault Tolerance.
+          </div>
+        </div>
+      </section>
 
-      <div class="card">
-        <strong>Software Engineer Intern — Fasmatech (NCSR Demokritos)</strong>
-        <div class="meta">Sept 2019 – Nov 2019 • NCSR Demokritos, Greece</div>
-        <ul>
-          <li>Developed algorithms for mass spectrometry in digital signal processing, focusing on spectral analysis.</li>
-        </ul>
-      </div>
-    </section>
+      <section id="experience">
+        <h2>Experience</h2>
+        <div class="item">
+          <strong>Senior Embedded Software Engineer — Software Competitiveness International S.A.</strong>
+          <div class="meta">Sept 2021 – Jul 2024 • Athens, Greece</div>
+          <ul>
+            <li>Led HQoS analysis, development, and testing, contributing to critical telecommunications software for global clients.</li>
+            <li>Acted as the go-to expert for troubleshooting and resolving complex system issues.</li>
+            <li>Mentored and trained colleagues through knowledge-sharing sessions for internal teams.</li>
+            <li>Coordinated incremental planning cycles (3 months), managing workload distribution across the team to ensure timely delivery and quality outcomes.</li>
+            <li>Applied embedded systems knowledge to optimize system performance and integrate advanced features into customer solutions.</li>
+          </ul>
+        </div>
 
-    <section id="projects">
-      <h2>Selected Projects</h2>
-      <div class="card">
-        <strong>FPGA-Based Multi-Error Mitigation — NTUA Microlab</strong>
-        <div class="meta">2021 • Athens, Greece</div>
-        <ul>
-          <li>Developed innovative fault-tolerance architectures on SoC FPGAs, enabling robust hardware design for critical systems.</li>
-        </ul>
-      </div>
+        <div class="item">
+          <strong>Researcher (ECE-NTUA Microlab) — National Technical University of Athens</strong>
+          <div class="meta">Mar 2020 – Jun 2022 • Athens, Greece</div>
+          <ul>
+            <li>Designed and implemented multi-error mitigation architectures on SoC FPGAs, enhancing fault tolerance for space systems.</li>
+            <li><a href="https://ieeexplore.ieee.org/document/9939621" target="_blank" rel="noopener" style="color: var(--accent);">Co-author</a>: "Combining Fault Tolerance Techniques and COTS SoC Accelerators for Payload Processing in Space."</li>
+            <li>Developed expertise in FPGA Design, Verilog, and hardware optimization for advanced research applications.</li>
+          </ul>
+        </div>
 
-      <div class="card">
-        <strong>Forest Fire Monitoring System — Advantage Austria & IEEE NTUA Student Branch Hackathon</strong>
-        <div class="meta">2018 • Athens, Greece</div>
-        <ul>
-          <li>Designed IoT-based solution for real-time environmental monitoring, integrating cameras, sensors, and web-based controls.</li>
-        </ul>
-      </div>
+        <div class="item">
+          <strong>Software Engineer — Hellenic Greek Army (401st Army Hospital)</strong>
+          <div class="meta">Nov 2020 – Jul 2021 • Athens, Greece</div>
+          <ul>
+            <li>Assistant in First Office of 401st Army Hospital. Responsible for IT maintenance of the Office.</li>
+          </ul>
+        </div>
 
-      <div class="card">
-        <strong>Google Hash Code</strong>
-        <div class="meta">2018 & 2019 • Athens, Greece</div>
-        <ul>
-          <li>Participated in 2018 & 2019 Hash Code competition, achieving top 20 score in Greece.</li>
-        </ul>
-      </div>
-    </section>
+        <div class="item">
+          <strong>Software Engineer Intern — Fasmatech (NCSR Demokritos)</strong>
+          <div class="meta">Sept 2019 – Nov 2019 • NCSR Demokritos, Greece</div>
+          <ul>
+            <li>Developed algorithms for mass spectrometry in digital signal processing, focusing on spectral analysis.</li>
+          </ul>
+        </div>
+      </section>
 
-    <section id="skills">
-      <h2>Skills</h2>
-      <div class="card">
-        <div style="margin-bottom: 12px;"><strong>Programming & Tools:</strong> C, C++, Python, Bash, Assembly, Verilog, VHDL, MATLAB, Cadence, Xilinx Vivado</div>
-        <div style="margin-bottom: 12px; color: var(--fg-light);"><strong>Specialization:</strong> Embedded Programming, FPGA Design, Hardware Security, Embedded Systems Optimization, ASIC Synthesis</div>
-        <div style="color: var(--fg-light);"><strong>Languages:</strong> English (C2), Greek (Native), French (B1)</div>
-      </div>
-    </section>
+      <section id="publications">
+        <h2>Publications</h2>
+        <div class="item">
+          <strong>Combining Fault Tolerance Techniques and COTS SoC Accelerators for Payload Processing in Space</strong>
+          <div class="meta">30th IFIP/IEEE VLSI-SoC • Oct 2022 • Patras, Greece</div>
+          <div style="color: var(--fg-light); margin-top: 8px;">
+            <a href="https://ieeexplore.ieee.org/document/9939621" target="_blank" rel="noopener" style="color: var(--accent);">IEEE Xplore</a> • 
+            <a href="https://www.ece.ntua.gr/gr/article/544" target="_blank" rel="noopener" style="color: var(--accent);">Best Paper Award (Co-author)</a>
+          </div>
+        </div>
+      </section>
 
-    <section id="awards">
-      <h2>Awards</h2>
-      <div class="card">
-        <strong>30th IFIP/IEEE VLSI-SoC — Best Paper Award (Co-author)</strong>
-        <div class="meta">Oct 2022 • Patras, Greece</div>
-        <ul>
-          <li>Co-author in <a href="https://www.ece.ntua.gr/gr/article/544" target="_blank" rel="noopener">best paper award</a> in 30th IFIP/IEEE VLSI-SoC</li>
-        </ul>
-      </div>
-      <div class="card">
-        <strong>Moving Education Forward — Eurobank Scholarship</strong>
-        <div class="meta">Jul 2015 • Heraklion, Greece</div>
-        <ul>
-          <li>Top graduate from high school</li>
-        </ul>
-      </div>
-    </section>
+      <section id="awards">
+        <h2>Awards</h2>
+        <div class="item">
+          <strong>30th IFIP/IEEE VLSI-SoC — Best Paper Award (Co-author)</strong>
+          <div class="meta">Oct 2022 • Patras, Greece</div>
+          <div style="color: var(--fg-light); margin-top: 8px;">
+            Co-author in <a href="https://www.ece.ntua.gr/gr/article/544" target="_blank" rel="noopener" style="color: var(--accent);">best paper award</a> in 30th IFIP/IEEE VLSI-SoC
+          </div>
+        </div>
+        <div class="item">
+          <strong>Moving Education Forward — Eurobank Scholarship</strong>
+          <div class="meta">Jul 2015 • Heraklion, Greece</div>
+          <div style="color: var(--fg-light); margin-top: 8px;">
+            Top graduate from high school
+          </div>
+        </div>
+      </section>
 
-    <section id="training">
-      <h2>Additional Training</h2>
-      <div class="card">
-        <strong>Duisburg-Essen University — Exchange Program</strong>
-        <div class="meta">2019 • Duisburg, Germany</div>
-        <ul>
-          <li>Completed coursework on robotic systems control using advanced walking devices, supported by the DAAD Exchange Program.</li>
-        </ul>
-      </div>
-    </section>
-  </main>
+      <section id="skills">
+        <h2>Skills</h2>
+        <div class="item">
+          <div style="margin-bottom: 12px; color: var(--fg-light);">
+            <strong style="color: var(--fg);">Programming & Tools:</strong> C, C++, Python, Bash, Assembly, Verilog, VHDL, MATLAB, Cadence, Xilinx Vivado
+          </div>
+          <div style="margin-bottom: 12px; color: var(--fg-light);">
+            <strong style="color: var(--fg);">Specialization:</strong> Embedded Programming, FPGA Design, Hardware Security, Embedded Systems Optimization, ASIC Synthesis
+          </div>
+          <div style="color: var(--fg-light);">
+            <strong style="color: var(--fg);">Languages:</strong> English (C2), Greek (Native), French (B1)
+          </div>
+        </div>
+      </section>
 
-  <footer>
-    <div class="small">© <span id="y"></span> Nikolaos Mastorakis • Built with GitHub Pages</div>
-  </footer>
+      <section id="training">
+        <h2>Additional Training</h2>
+        <div class="item">
+          <strong>Duisburg-Essen University — Exchange Program</strong>
+          <div class="meta">2019 • Duisburg, Germany</div>
+          <div style="color: var(--fg-light); margin-top: 8px;">
+            Completed coursework on robotic systems control using advanced walking devices, supported by the DAAD Exchange Program.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="contact">
+      <h3>Contact</h3>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+        </svg>
+        <a href="mailto:nickmastorakis@gmail.com">Email</a>
+      </div>
+      <div class="contact-item" style="margin-top: 15px;">
+        <a href="https://www.linkedin.com/in/nikos-mastorakis-046989134" target="_blank" rel="noopener" style="color: var(--fg-light);">LinkedIn</a> • 
+        <a href="https://github.com/NikolaosMastorakis" target="_blank" rel="noopener" style="color: var(--fg-light);">GitHub</a> • 
+        <a href="./Nikolaos_Mastorakis_CV.pdf" style="color: var(--fg-light);">Download CV</a>
+      </div>
+    </footer>
+  </div>
 
   <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
   </script>
 </body>
 </html>
